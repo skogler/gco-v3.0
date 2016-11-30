@@ -428,7 +428,7 @@ int main(int argc, char **argv)
 	// which actually is a grid. Also uses spatially varying terms
 	GeneralGraph_DArraySArraySpatVarying(width,height,num_pixels,num_labels);
 
-	printf("\n  Finished %lu (%lu) clock per sec %d",clock()/CLOCKS_PER_SEC,clock(),CLOCKS_PER_SEC);
+  printf("\n  Finished %lu (%lu) clock per sec %ld",clock()/CLOCKS_PER_SEC,clock(),CLOCKS_PER_SEC);
 
 	return 0;
 }
