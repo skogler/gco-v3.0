@@ -1,32 +1,39 @@
 project(gco)
 cmake_minimum_required(VERSION 2.8)
 
+set(PROJECT_VERSION_MAJOR 3)
+set(PROJECT_VERSION_MINOR 0)
+set(PROJECT_VERSIOM_PATCH 0)
+set(PROJECT_NUMBER "v${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.${PROJECT_VERSIOM_PATCH}")
+
 if (NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE "Release")
 endif()
 
 set(lib_srcs
-    GCoptimization.cpp
-    GCoptimization.h
-    LinkedBlockList.cpp
-    LinkedBlockList.h
-    block.h
-    energy.h
-    graph.h
-    )
+  "${PROJECT_SOURCE_DIR}/src/GCoptimization.cpp"
+  "${PROJECT_SOURCE_DIR}/src/GCoptimization.h"
+  "${PROJECT_SOURCE_DIR}/src/LinkedBlockList.cpp"
+  "${PROJECT_SOURCE_DIR}/src/LinkedBlockList.h"
+  "${PROJECT_SOURCE_DIR}/src/block.h"
+  "${PROJECT_SOURCE_DIR}/src/energy.h"
+  "${PROJECT_SOURCE_DIR}/src/graph.h"
+)
 
 set(example_srcs
-    example.cpp)
+  "${PROJECT_SOURCE_DIR}/src/example.cpp"
+)
 
-add_library(gco ${lib_srcs})
-add_executable(example ${example_srcs})
-target_link_libraries(example gco)
+add_library("${PROJECT_NAME}" ${lib_srcs})
+add_executable("${PROJECT_NAME}-example" ${example_srcs})
+target_link_libraries("${PROJECT_NAME}-example" "${PROJECT_NAME}")
 
-install(TARGETS gco
-        ARCHIVE DESTINATION "${CMAKE_INSTALL_PREFIX}/lib"
-        LIBRARY DESTINATION "${CMAKE_INSTALL_PREFIX}/lib"
+install(TARGETS "${PROJECT_NAME}"
+        ARCHIVE DESTINATION "lib"
+        LIBRARY DESTINATION "lib"
         COMPONENT library)
-install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-        DESTINATION "${CMAKE_INSTALL_PREFIX}/include"
-        FILES_MATCHING PATTERN "*.h" PATTERN "*.inl")
 
+install(DIRECTORY "${PROJECT_SOURCE_DIR}/src/"
+        DESTINATION "include/${PROJECT_NAME}/"
+        FILES_MATCHING PATTERN "*.h" PATTERN "*.inl"
+        PATTERN "matlab" EXCLUDE)
