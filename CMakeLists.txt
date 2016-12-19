@@ -6,11 +6,23 @@ set(PROJECT_VERSION_MINOR 0)
 set(PROJECT_VERSIOM_PATCH 0)
 set(PROJECT_NUMBER "v${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.${PROJECT_VERSIOM_PATCH}")
 
+# add c++11 compiler flag
+include(CheckCXXCompilerFlag)
+CHECK_CXX_COMPILER_FLAG("-std=c++11" COMPILER_SUPPORTS_CXX11)
+CHECK_CXX_COMPILER_FLAG("-std=c++0x" COMPILER_SUPPORTS_CXX0X)
+if(COMPILER_SUPPORTS_CXX11)
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -DBOOST_SIGNALS_NO_DEPRECATION_WARNING")
+elseif(COMPILER_SUPPORTS_CXX0X)
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x")
+else()
+  message(STATUS "The compiler ${CMAKE_CXX_COMPILER} has no C++11 support. Please use a different C++ compiler.")
+endif()
+
 if (NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE "Release")
 endif()
 
-set(lib_srcs
+set(LIB_SRC
   "${PROJECT_SOURCE_DIR}/src/GCoptimization.cpp"
   "${PROJECT_SOURCE_DIR}/src/GCoptimization.h"
   "${PROJECT_SOURCE_DIR}/src/LinkedBlockList.cpp"
@@ -20,13 +32,18 @@ set(lib_srcs
   "${PROJECT_SOURCE_DIR}/src/graph.h"
 )
 
-set(example_srcs
-  "${PROJECT_SOURCE_DIR}/src/example.cpp"
+set(APPS
+  "example"
+  "JsonParser"
 )
 
-add_library("${PROJECT_NAME}" ${lib_srcs})
-add_executable("${PROJECT_NAME}-example" ${example_srcs})
-target_link_libraries("${PROJECT_NAME}-example" "${PROJECT_NAME}")
+add_library("${PROJECT_NAME}" ${LIB_SRC})
+include_directories("${PROJECT_SOURCE_DIR}/src")
+
+foreach(EXAMPLE ${APPS})
+  add_executable("${PROJECT_NAME}-${EXAMPLE}" "${PROJECT_SOURCE_DIR}/app/${EXAMPLE}.cpp")
+  target_link_libraries("${PROJECT_NAME}-${EXAMPLE}" "${PROJECT_NAME}")
+endforeach(EXAMPLE)
 
 install(TARGETS "${PROJECT_NAME}"
         ARCHIVE DESTINATION "lib"
