@@ -11,13 +11,17 @@ template <typename T> T createFromTree(const pt::ptree &tree);
 struct Features {};
 
 template <> Features createFromTree(const pt::ptree &tree) {
-  std::vector<int> a;
-  for (auto i : a) {
-    i++;
-  }
   for (auto node : tree) {
-    std::cout << "Node: " << node.first.c_str() << " - " << node.second.size() << std::endl;
+    std::cout << "Node: " << node.first.c_str() << " - " << node.second.size()
+              << std::endl;
+    auto& value = node.second.front().second.front().second;
+    std::cout << "" << std::endl;
   }
+  // validate content
+  assert(tree.count("features")  == 1);
+  assert(tree.count("timestamp") == 1);
+  assert(tree.count("FoV")       == 1);
+  //
 }
 
 struct GroundTruth {};
@@ -39,15 +43,15 @@ int main(const int argc, const char **args) {
 
   std::string path = args[1];
   std::string features_path = path + "/features.json";
-  std::string ground_truth_path = path + "/groundtruth.json";
+  std::string groundtruth_path = path + "/groundtruth.json";
   std::string settings_path = path + "/settings.json";
 
   pt::ptree features_data, ground_truth_data, settings_data;
-  try{
+  try {
     pt::read_json(features_path, features_data);
-    pt::read_json(ground_truth_path, ground_truth_data);
-    pt::read_json(settings_path, settings_data);
-  } catch (const pt::json_parser_error& e){
+    //pt::read_json(groundtruth_path, ground_truth_data);
+    //pt::read_json(settings_path, settings_data);
+  } catch (const pt::json_parser_error &e) {
     std::cerr << "Error while parsing data: " << e.what() << std::endl;
     exit(-2);
   }
