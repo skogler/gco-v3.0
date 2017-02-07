@@ -105,6 +105,7 @@
 #error Requires Visual C++ 2005 (VC8) compiler or later.
 #endif
 
+#include <exception>
 #include <cstddef>
 #include "energy.h"
 #include "graph.inl"
@@ -114,11 +115,12 @@
 // Utility functions, classes, and macros
 /////////////////////////////////////////////////////////////////////
 
-class GCException {
+class GCException : public std::exception {
 public:
 	const char* message;
 	GCException( const char* m ): message(m) { }
 	void Report();
+	virtual const char* what() const noexcept override { return message; }
 };
 
 #ifdef _WIN32
