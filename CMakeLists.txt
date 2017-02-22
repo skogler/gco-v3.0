@@ -22,7 +22,7 @@ if (NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE "Release")
 endif()
 
-find_package(Boost 1.54 COMPONENTS date_time REQUIRED)
+find_package(Boost 1.54 COMPONENTS program_options REQUIRED)
 find_package(fformation REQUIRED)
 
 set(LIB_SRC
@@ -48,11 +48,14 @@ include_directories(
   ${FFORMATION_INCLUDE_DIRS}
 )
 
+link_directories(${Boost_LIBRARY_DIRS})
+
 foreach(EXAMPLE ${APPS})
   add_executable("${PROJECT_NAME}-${EXAMPLE}" "${PROJECT_SOURCE_DIR}/app/${EXAMPLE}.cpp")
   target_link_libraries("${PROJECT_NAME}-${EXAMPLE}"
     ${PROJECT_NAME}
     ${FFORMATION_LIBRARIES}
+    ${Boost_LIBRARIES}
     )
 endforeach(EXAMPLE)
 
