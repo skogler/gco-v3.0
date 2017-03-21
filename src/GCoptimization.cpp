@@ -1174,7 +1174,6 @@ void GCoptimization::updateLabelingInfo(bool updateCounts, bool updateActive, bo
 			for ( LabelCost* lc = m_labelcostsAll; lc; lc = lc->next )
 				lc->active = false;
 
-			EnergyType energy = 0;
 			for ( LabelID l = 0; l < m_num_labels; ++l ) 
 				if ( m_labelCounts[l] )
 					for ( LabelCostIter* lci = m_labelcostsByLabel[l]; lci; lci = lci->next ) 
