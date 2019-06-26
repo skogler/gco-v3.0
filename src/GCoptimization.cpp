@@ -1509,6 +1509,7 @@ void GCoptimizationGridGraph::computeNeighborWeights(EnergyTermType *vCosts,Ener
 			else if (i-nSite == -1 )       weight = hCosts[i];
 			else if ( i-nSite == m_width ) weight = vCosts[nSite];
 			else if (i-nSite == -m_width ) weight = vCosts[i];
+			else throw;
 	
 			m_neighborsWeights[i*4+n] = weight;
 		}
