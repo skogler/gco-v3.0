@@ -232,6 +232,7 @@ public:
 	void setSmoothCostFunctor(SmoothCostFunctor* f);
 	struct SmoothCostFunctor {
 		virtual EnergyTermType compute(SiteID s1, SiteID s2, LabelID l1, LabelID l2) = 0;
+		virtual ~SmoothCostFunctor() = default;
 	};
 
 	// Sets the cost of using label in the solution. 
